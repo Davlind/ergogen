@@ -1,0 +1,315 @@
+units:
+  key_height: cy
+  key_width: cx
+
+  keycap_height: 16.5
+  keycap_width: 17.5
+  keycap_corner: 1
+
+  padding_x: 0.5
+  padding_y: 0.5
+points:
+  rotate: 5
+  key:
+    tags:
+      1u: true
+    footprints:
+      choc_hotswap:
+        type: choc
+        params:
+          hotswap: true
+          keycaps: true
+          reverse: true
+          
+        nets:
+          # from: P1
+          # to: P2
+          from: =colrow
+          to: =column_net
+      diode:
+        type: diode
+        nets:
+          # from: P3
+          # to: P4
+          from: =colrow
+          to: =row_net
+        anchor:
+          shift: [0, -5]
+  zones:
+    matrix:
+      key.padding: key_height
+      columns:
+        outer:
+          spread: key_width 
+          key:
+            column_net: P21
+          rows:    
+            bottom:
+              bind: [30,60,0,0]
+        pinky:
+          spread: key_width
+          stagger: 0.1 key_height
+          key:
+            column_net: P20          
+          rows:    
+            top:
+              bind: [0,5,0,0]
+            home:
+              bind: [0,5,0,0]
+        ring:
+          stagger: 0.4 key_height
+          spread: key_width + 0.8
+          key:
+            column_net: P19
+          rotate: -5
+        middle:
+          stagger: 0.2 key_height
+          spread: key_width
+          key:
+            column_net: P18
+        index:
+          stagger: -0.2 key_height
+          spread: key_width   
+          key:
+            column_net: P15
+        inner:
+          stagger: -0.1 key_height
+          spread: key_width
+          key:
+            column_net: P14
+          rows:    
+            home:
+              bind: [5,0,0,0]
+            bottom:
+              bind: [5,0,10,0]
+      rows:
+        bottom:
+          row_net: P6
+        home:
+          row_net: P5
+        top:
+          row_net: P4
+    thumbsection:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [0, -1.4 key_height]
+      columns:
+        outer:
+          rotate: 90
+          rows:    
+            thumb:
+              bind: [0,10,5,0]
+          key:
+            column_net: P18
+            tags:
+              15u: true
+              1u: false
+        home:
+          rotate: -13
+          origin: [-5.45 key_width, 4.9 key_height]
+          rows:    
+            thumb:
+              bind: [2.95,0,3,0]
+          key: 
+            column_net: P15
+            tags:
+              15u: true
+              1u: false
+        inner:
+          rotate: -13
+          origin: [-5.45 key_width, 4.9 key_height]
+          rows:    
+            thumb:
+              bind: [2.95,0,0,0]
+          key:
+            column_net: P14
+            tags:
+              15u: true
+              1u: false
+      rows:
+        thumb:
+          row_net: P7
+outlines:
+  
+  exports:
+    raw:
+      - type: keys
+        side: both
+        size: [key_width + padding_x, key_height + padding_y]
+        corner: keycap_corner
+
+        tags: [1u]
+      - type: keys
+        side: both
+        size: [1.5 key_width + padding_x, key_height + padding_y]
+        corner: keycap_corner
+        tags: [15u]
+    _controller_area:
+      - type: rectangle
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [2.5,-23.8]
+        size: [32, 66.55]
+        corner: keycap_corner
+    base:
+      - type: outline
+        name: raw
+        fillet: 1
+      - type: outline
+        name: _controller_area
+        operation: add
+    keycaps:
+      main:
+        type: keys
+        side: both
+        size: [keycap_width, keycap_height]
+        bound: false
+        corner: keycap_corner
+        tags: [1u]
+      large:
+        type: keys
+        side: both
+        size: [1.5 keycap_width, keycap_height]
+        bound: false
+        corner: keycap_corner
+        tags: [15u]
+    preview:
+      - type: outline
+        name: base
+      - type: outline
+        name: keycaps
+        operation: stack
+
+pcbs:
+  main:
+    outlines:
+      edge:
+        outline: base
+        layer: Edge.Cuts
+    footprints:
+      mcu_:
+        type: promicro_pretty
+        params:
+          orientation: down
+          batteryPins: true
+        anchor:
+          ref:
+            - matrix_inner_top
+          shift: [key_width + 4, -9.1]
+          rotate: 270
+      
+      oled:
+        type: oled
+        anchor:
+          ref:
+            - matrix_inner_top
+          shift: [key_width - 1.9, -27]
+          rotate: 90
+        nets:
+          SDA: P2
+          SCL: P3
+      
+      # trrs_left:
+      #   type: trrs
+      #   nets:
+      #     A: GND
+      #     B: GND
+      #     C: P1
+      #     D: VCC
+      #   anchor:
+      #     ref: matrix_inner_bottom
+      #     shift: [key_width + 16.5, 1.5 - 14.5]
+      #     rotate: -90
+      #   params:
+      #     reverse: true
+      #     symmetric: true
+      # trrs_right:
+      #   type: trrs
+      #   nets:
+      #     A: GND
+      #     B: GND
+      #     C: P1
+      #     D: VCC
+      #   anchor:
+      #     ref: mirror_matrix_inner_bottom
+      #     shift: [2.5 key_width - 10.5, 6.1 - 14.5]
+      #     rotate: -90
+      #   params:
+      #     reverse: true
+      #     symmetric: true
+      bat:
+        type: bat
+        nets: 
+          neg: GND
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [key_width + 13.7, 3]
+          rotate: -90
+      b3u1000p:
+        type: b3u1000p
+        nets:
+          r1: RST  
+          r2: GND
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [key_width + 13.7, 0]
+          rotate: 0
+        params:
+          reverse: true 
+      via6:
+        type: via
+        anchor: 
+          ref: matrix_inner_top
+          shift: [ 0, 0 ]
+        nets: 
+          net: RST 
+      pcm12:
+        type: pcm12
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [key_width + 14.3, -6]
+          rotate: 90
+        nets:
+          from: pos  
+          to: RAW
+        params:
+          reverse: true 
+      scrollwheel:
+        type: scrollwheel
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [ key_width + 1, -2 ]
+          rotate: 180
+        nets:
+          from: P10
+          to: enc_diode
+          A: P8
+          B: P9
+          C: GND
+          D: ''
+        params:
+          reverse: false
+      rotary:
+        type: rotary
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [ key_width + 2, -3.2 ]
+          rotate: 180
+        nets:
+          from: P10
+          to: enc_diode
+          A: P8
+          B: GND
+          C: P9
+      encoderdiode:
+        type: diode
+        anchor:
+          ref: matrix_inner_bottom
+          rotate: 0
+          shift: [ key_width + 2, -12 ]
+        nets:
+          from: enc_diode
+          to: P6
+        params:
+          via_in_pad: true
+          through_hole: false

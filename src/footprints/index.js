@@ -1,5 +1,7 @@
 module.exports = {
     alps: require('./alps'),
+    b3u1000p: require('./b3u1000p'),
+    bat: require('./bat'),
     button: require('./button'),
     choc: require('./choc'),
     chocmini: require('./chocmini'),
@@ -10,11 +12,15 @@ module.exports = {
     oled: require('./oled'),
     omron: require('./omron'),
     pad: require('./pad'),
+    pcm12: require('./pcm12'),
     promicro: require('./promicro'),
+    promicro2: require('./promicro2'),
+    promicro_pretty: require('./promicro_pretty'),
     rgb: require('./rgb'),
     rotary: require('./rotary'),
     scrollwheel: require('./scrollwheel'),
     slider: require('./slider'),
+    text: require('./text'),
     trrs: require('./trrs'),
     via: require('./via'),
 }
