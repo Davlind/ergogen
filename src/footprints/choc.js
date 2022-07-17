@@ -21,7 +21,8 @@ module.exports = {
     class: 'S',
     hotswap: false,
     reverse: false,
-    keycaps: false
+    keycaps: false,
+    tracks: false
   },
   body: p => {
     const standard = `
@@ -56,16 +57,74 @@ module.exports = {
       (fp_line (start 9 8.5) (end -9 8.5) (layer Dwgs.User) (width 0.15))
       (fp_line (start -9 8.5) (end -9 -8.5) (layer Dwgs.User) (width 0.15))
       `
+
+    const via = `
+      (pad 1 thru_hole circle (at 7 -7.85) (size 0.6 0.6) (drill 0.3) (layers *.Cu) (zone_connect 2) ${p.net.to.str})
+    `
+    function tracks() {
+      let t = ''
+      if (p.param.tracks) {
+        if (p.param.reverse) {
+        let t = `
+        ${'' /* B.Cu Column to via */}
+        (pad "" smd custom (at 8.275 -3.75 ${p.rot}) (size 0.25 0.25) (layers B.Cu) ${p.net.to.str}
+          (zone_connect 0)
+          (options (clearance outline) (anchor circle))
+          (primitives
+            (gr_line (start 0 0) (end 0 -4.1) (width 0.25))
+            (gr_line (start 0 -4.1) (end -1.17 -4.1) (width 0.25))
+          ))
+
+        ${'' /* F.Cu Column to via */}
+        (pad "" smd custom (at -8.275 -3.75 ${p.rot}) (size 0.25 0.25) (layers F.Cu) ${p.net.to.str}
+          (zone_connect 0)
+          (options (clearance outline) (anchor circle))
+          (primitives
+            (gr_line (start 0 0) (end 4.1 -4.1) (width 0.25))
+            (gr_line (start 4.1 -4.1) (end 15.2 -4.1) (width 0.25))
+          ))
+
+        ${'' /* F.Cu row to diode */}
+        (pad "" smd custom (at 3.275 -5.95 ${p.rot}) (size 0.25 0.25) (layers F.Cu) ${p.net.from.str}
+          (zone_connect 0)
+          (options (clearance outline) (anchor circle))
+          (primitives
+            (gr_line (start 0 0) (end -0.5 0.5) (width 0.25))
+            (gr_line (start -0.5 0.5) (end -0.5 10) (width 0.25))
+            (gr_line (start -0.5 10) (end 0.5 11) (width 0.25))
+          ))
+          `
+          }
+
+          t += `
+          ${'' /* B.Cu row to diode */}
+          (pad "" smd custom (at -3.275 -5.95 ${p.rot}) (size 0.25 0.25) (layers B.Cu) ${p.net.from.str}
+            (zone_connect 0)
+            (options (clearance outline) (anchor circle))
+            (primitives
+              (gr_line (start 0.5 0) (end 6.05 5.55) (width 0.25))
+              (gr_line (start 6.05 5.55) (end 6.05 10) (width 0.25))
+              (gr_line (start 6.05 10) (end 7.05 11) (width 0.25))
+            ))
+        `        
+      }
+
+      return t
+    }
+
     function pins(def_neg, def_pos, def_side) {
       if(p.param.hotswap) {
         return `
           ${'' /* holes */}
           (pad "" np_thru_hole circle (at ${def_pos}5 -3.75) (size 3 3) (drill 3) (layers *.Cu *.Mask))
           (pad "" np_thru_hole circle (at 0 -5.95) (size 3 3) (drill 3) (layers *.Cu *.Mask))
-      
+          
+
           ${'' /* net pads */}
           (pad 1 smd rect (at ${def_neg}3.275 -5.95 ${p.rot}) (size 2.6 2.6) (layers ${def_side}.Cu ${def_side}.Paste ${def_side}.Mask)  ${p.net.from.str})
           (pad 2 smd rect (at ${def_pos}8.275 -3.75 ${p.rot}) (size 2.6 2.6) (layers ${def_side}.Cu ${def_side}.Paste ${def_side}.Mask)  ${p.net.to.str})
+
+
         `
       } else {
           return `
@@ -76,16 +135,19 @@ module.exports = {
       }
     }
     if(p.param.reverse) {
-      return `
-        ${standard}
-        ${p.param.keycaps ? keycap : ''}
-        ${pins('-', '', 'B')}
-        ${pins('', '-', 'F')})
+        return `
+          ${standard}
+          ${p.param.keycaps ? keycap : ''}
+          ${p.param.tracks ? via : ''}
+          ${tracks()}
+          ${pins('-', '', 'B')}
+          ${pins('', '-', 'F')})
         `
     } else {
       return `
         ${standard}
         ${p.param.keycaps ? keycap : ''}
+        ${tracks()}
         ${pins('-', '', 'B')})
         `
     }

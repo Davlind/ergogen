@@ -39,8 +39,8 @@ module.exports = {
       ${p.at /* parametric position */}
 
       ${'' /* footprint reference */}
-      (fp_text reference "${p.ref}" (at 0 0) (layer F.SilkS) ${p.ref_hide} (effects (font (size 1.27 1.27) (thickness 0.15))))
-      (fp_text value "" (at 0 0) (layer F.SilkS) hide (effects (font (size 1.27 1.27) (thickness 0.15))))
+      (fp_text reference "${p.ref}" (at 0 0) (layer Dwgs.User) ${p.ref_hide} (effects (font (size 1.27 1.27) (thickness 0.15))))
+      (fp_text value "" (at 0 0) (layer Dwgs.User) hide (effects (font (size 1.27 1.27) (thickness 0.15))))
     
       ${''/* illustration of the (possible) USB port overhang */}
       (fp_line (start -19.304 -3.81) (end -14.224 -3.81) (layer Dwgs.User) (width 0.15))
@@ -49,10 +49,10 @@ module.exports = {
       (fp_line (start -14.224 -3.81) (end -14.224 3.81) (layer Dwgs.User) (width 0.15))
     
       ${''/* component outline */}
-      (fp_line (start -17.78 8.89) (end 15.24 8.89) (layer F.SilkS) (width 0.15))
-      (fp_line (start 15.24 8.89) (end 15.24 -8.89) (layer F.SilkS) (width 0.15))
-      (fp_line (start 15.24 -8.89) (end -17.78 -8.89) (layer F.SilkS) (width 0.15))
-      (fp_line (start -17.78 -8.89) (end -17.78 8.89) (layer F.SilkS) (width 0.15))
+      (fp_line (start -17.78 8.89) (end 15.24 8.89) (layer Dwgs.User) (width 0.15))
+      (fp_line (start 15.24 8.89) (end 15.24 -8.89) (layer Dwgs.User) (width 0.15))
+      (fp_line (start 15.24 -8.89) (end -17.78 -8.89) (layer Dwgs.User) (width 0.15))
+      (fp_line (start -17.78 -8.89) (end -17.78 8.89) (layer Dwgs.User) (width 0.15))
       `
     function pins(def_neg, def_pos) {
       return `

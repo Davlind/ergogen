@@ -1,6 +1,8 @@
 module.exports = {
     alps: require('./alps'),
     b3u1000p: require('./b3u1000p'),
+    background_front: require('./background_front'),
+    background_back: require('./background_back'),
     bat: require('./bat'),
     button: require('./button'),
     choc: require('./choc'),
@@ -10,9 +12,11 @@ module.exports = {
     jumper: require('./jumper'),
     mx: require('./mx'),
     oled: require('./oled'),
+    oled128x64: require('./oled128x64'),
     omron: require('./omron'),
     pad: require('./pad'),
     pcm12: require('./pcm12'),
+    pimoroni_trackball: require('./pimoroni_trackball'),
     promicro: require('./promicro'),
     promicro2: require('./promicro2'),
     promicro_pretty: require('./promicro_pretty'),
@@ -23,4 +27,6 @@ module.exports = {
     text: require('./text'),
     trrs: require('./trrs'),
     via: require('./via'),
+    stellis_logo_left: require('./stellis_logo_left'),
+    stellis_logo_right: require('./stellis_logo_right'),
 }

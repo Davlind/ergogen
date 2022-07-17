@@ -6,8 +6,8 @@ units:
   keycap_width: 17.5
   keycap_corner: 1
 
-  padding_x: 0.5
-  padding_y: 0.5
+  padding_x: 2
+  padding_y: 2
 points:
   rotate: 5
   key:
@@ -20,7 +20,7 @@ points:
           hotswap: true
           keycaps: true
           reverse: true
-          
+          tracks: true
         nets:
           # from: P1
           # to: P2
@@ -28,6 +28,8 @@ points:
           to: =column_net
       diode:
         type: diode
+        params:
+          tracks: true
         nets:
           # from: P3
           # to: P4
@@ -148,8 +150,8 @@ outlines:
       - type: rectangle
         anchor:
           ref: matrix_inner_bottom
-          shift: [2.5,-23.8]
-        size: [32, 66.55]
+          shift: [2.5,-23.5]
+        size: [32.9, 65.25]
         corner: keycap_corner
     base:
       - type: outline
@@ -195,7 +197,7 @@ pcbs:
         anchor:
           ref:
             - matrix_inner_top
-          shift: [key_width + 4, -9.1]
+          shift: [key_width + 4.2, -9.1]
           rotate: 270
       
       oled:
@@ -203,47 +205,18 @@ pcbs:
         anchor:
           ref:
             - matrix_inner_top
-          shift: [key_width - 1.9, -27]
+          shift: [key_width - 1.8, -27]
           rotate: 90
         nets:
           SDA: P2
           SCL: P3
-      
-      # trrs_left:
-      #   type: trrs
-      #   nets:
-      #     A: GND
-      #     B: GND
-      #     C: P1
-      #     D: VCC
-      #   anchor:
-      #     ref: matrix_inner_bottom
-      #     shift: [key_width + 16.5, 1.5 - 14.5]
-      #     rotate: -90
-      #   params:
-      #     reverse: true
-      #     symmetric: true
-      # trrs_right:
-      #   type: trrs
-      #   nets:
-      #     A: GND
-      #     B: GND
-      #     C: P1
-      #     D: VCC
-      #   anchor:
-      #     ref: mirror_matrix_inner_bottom
-      #     shift: [2.5 key_width - 10.5, 6.1 - 14.5]
-      #     rotate: -90
-      #   params:
-      #     reverse: true
-      #     symmetric: true
       bat:
         type: bat
         nets: 
           neg: GND
         anchor:
           ref: matrix_inner_bottom
-          shift: [key_width + 13.7, 3]
+          shift: [key_width + 14.2, 2]
           rotate: -90
       b3u1000p:
         type: b3u1000p
@@ -252,22 +225,23 @@ pcbs:
           r2: GND
         anchor:
           ref: matrix_inner_bottom
-          shift: [key_width + 13.7, 0]
+          shift: [key_width + 14.6, -1.3]
           rotate: 0
         params:
           reverse: true 
       via6:
         type: via
         anchor: 
-          ref: matrix_inner_top
-          shift: [ 0, 0 ]
+          ref: matrix_inner_bottom
+          shift: [key_width + 14.6, -1.3]
+          rotate: 0
         nets: 
           net: RST 
       pcm12:
         type: pcm12
         anchor:
           ref: matrix_inner_bottom
-          shift: [key_width + 14.3, -6]
+          shift: [key_width + 15.2, -9]
           rotate: 90
         nets:
           from: pos  
@@ -278,8 +252,8 @@ pcbs:
         type: scrollwheel
         anchor:
           ref: matrix_inner_bottom
-          shift: [ key_width + 1, -2 ]
-          rotate: 180
+          shift: [ key_width + 1.6, -1 ]
+          rotate: 0
         nets:
           from: P10
           to: enc_diode
@@ -289,12 +263,13 @@ pcbs:
           D: ''
         params:
           reverse: false
+          flip: true
       rotary:
         type: rotary
         anchor:
           ref: matrix_inner_bottom
-          shift: [ key_width + 2, -3.2 ]
-          rotate: 180
+          shift: [ key_width + 4, -4 ]
+          rotate: 0
         nets:
           from: P10
           to: enc_diode
@@ -306,10 +281,22 @@ pcbs:
         anchor:
           ref: matrix_inner_bottom
           rotate: 0
-          shift: [ key_width + 2, -12 ]
+          shift: [ key_width + 2.4, -12 ]
         nets:
           from: enc_diode
           to: P6
         params:
           via_in_pad: true
           through_hole: false
+      logo_left:
+        type: stellis_logo_left
+        anchor: 
+          ref: matrix_middle_bottom
+          rotate: 5
+          shift: [ -6, -16.5 ]
+      logo_right:
+        type: stellis_logo_right
+        anchor: 
+          ref: matrix_middle_bottom
+          rotate: 5
+          shift: [ 5.5, -15.5 ]

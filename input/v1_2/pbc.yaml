@@ -1,0 +1,654 @@
+units:
+  key_height: cy
+  key_width: cx
+
+  keycap_height: 16.5
+  keycap_width: 17.5
+  keycap_corner: 1
+
+  padding_x: 2
+  padding_y: 2
+points:
+  rotate: 5
+  key:
+    tags:
+      1u: true
+    footprints: &test
+      choc_hotswap:
+        type: choc
+        params:
+          hotswap: true
+          keycaps: true
+          reverse: false
+          tracks: true
+        nets:
+          # from: P1
+          # to: P2
+          from: =colrow
+          to: =column_net
+      diode:
+        type: diode
+        params:
+          tracks: true
+        nets:
+          # from: P3
+          # to: P4
+          from: =colrow
+          to: =row_net
+        anchor:
+          shift: [0, -5]
+    mirror:
+      footprints: &test_mirror
+        choc_hotswap:
+          type: choc
+          params:
+            hotswap: true
+            keycaps: true
+            reverse: false
+            tracks: true
+          nets:
+            # from: P1
+            # to: P2
+            from: =colrow
+            to: =column_net
+        diode:
+          type: diode
+          params:
+            tracks: true
+          nets:
+            # from: P3
+            # to: P4
+            from: =colrow
+            to: =row_net
+          anchor:
+            shift: [0, -5]
+  zones:
+    matrix:
+      key.padding: key_height
+      columns:
+        outer:
+          spread: key_width 
+          key:
+            column_net: L_P21
+            mirror:
+              column_net: R_P21
+          rows:    
+            bottom:
+              bind: [30,60,0,0]
+        pinky:
+          spread: key_width
+          stagger: 0.1 key_height
+          key:
+            column_net: L_P20  
+            mirror:
+              column_net: R_P20        
+          rows:    
+            top:
+              bind: [0,5,0,0]
+            home:
+              bind: [0,5,0,0]
+        ring:
+          stagger: 0.4 key_height
+          spread: key_width + 0.8
+          key:
+            column_net: L_P19
+            mirror:
+              column_net: R_P19
+          rotate: -5
+        middle:
+          stagger: 0.2 key_height
+          spread: key_width
+          key:
+            column_net: L_P18
+            mirror:
+              column_net: R_P18
+        index:
+          stagger: -0.2 key_height
+          spread: key_width   
+          key:
+            column_net: L_P15
+            mirror:
+              column_net: R_P15
+        inner:
+          stagger: -0.1 key_height
+          spread: key_width
+          key:
+            column_net: L_P14
+            mirror:
+              column_net: R_P14
+          rows:    
+            home:
+              bind: [5,0,0,0]
+            bottom:
+              bind: [5,0,10,0]
+      rows:
+        bottom:
+          row_net: L_P6
+          row_mark: LB
+          mirror:
+            row_net: R_P6
+            row_mark: RB
+        home:
+          row_net: L_P5
+          row_mark: LH
+          mirror:
+            row_net: R_P5
+            row_mark: RH
+        top:
+          row_net: L_P4
+          row_mark: LT
+          mirror:
+            row_net: R_P4
+            row_mark: RT
+    thumbsection:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [0, -1.4 key_height]
+      columns:
+        outer:
+          rotate: 90
+          rows:    
+            thumb:
+              bind: [23,10,5,0]
+          key:
+            column_net: L_P19
+            mirror:
+              column_net: R_P19
+            tags:
+              15u: true
+              1u: false
+        home:
+          rotate: -13
+          origin: [-5.45 key_width, 4.9 key_height]
+          rows:    
+            thumb:
+              bind: [2,0,2.23,0]
+          key: 
+            column_net: L_P18
+            mirror:
+              column_net: R_P18
+            tags:
+              15u: true
+              1u: false
+        inner:
+          rotate: -13
+          origin: [-5.45 key_width, 4.9 key_height]
+          rows:    
+            thumb:
+              bind: [2.23,0,0,0]
+          key:
+            column_net: L_P15
+            mirror:
+              column_net: R_P15
+            tags:
+              15u: true
+              1u: false
+      rows:
+        thumb:
+          row_net: L_P7
+          mirror:
+            row_net: R_P7
+  mirror: 
+    ref: matrix_inner_top
+    distance: 75.4
+outlines:
+  
+  exports:
+    raw:
+      - type: keys
+        side: both
+        size: [key_width + padding_x, key_height + padding_y]
+        corner: keycap_corner
+
+        tags: [1u]
+      - type: keys
+        side: both
+        size: [1.5 key_width + padding_x, key_height + padding_y]
+        corner: keycap_corner
+        tags: [15u]
+    controller_area:
+      - type: rectangle
+        mirror: true
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [0,-19.8]
+        size: [37.2, 61.6]
+        corner: keycap_corner
+      - type: rectangle
+        mirror: true
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [24.1,-23.2]
+          rotate: -26
+        size: [10, 10]
+        corner: keycap_corner
+        operation: add
+    cut_area:
+      - type: rectangle
+        mirror: true
+        anchor:
+          ref: matrix_inner_home
+          shift: [0,7]
+        size: [40, 12]
+        corner: keycap_corner
+      - type: rectangle
+        mirror: true
+        anchor:
+          ref: matrix_inner_home
+          shift: [0,-27]
+        size: [40, 12]
+        corner: keycap_corner
+    cut_holes:
+      c1:
+        type: circle
+        anchor:
+          ref: 
+          - matrix_inner_home
+          - mirror_matrix_inner_home 
+          shift: [0,7]
+        radius: 0.5
+        operation: stack
+      c2:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,9]
+      c3:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,11]
+      c4:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,13]
+      c5:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,15]
+      c6:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,17]
+      c7:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,19]
+
+
+      c8:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-27]
+      c9:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-25]
+      c10:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-23]
+      c11:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-21]
+      c12:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-19]
+      c13:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-17]
+      c14:
+        $extends: outlines.exports.cut_holes.c1
+        anchor:
+          shift: [0,-15]
+      
+    base:
+      - type: outline
+        name: raw
+        fillet: 1
+      - type: outline
+        name: controller_area
+        operation: add
+      - type: outline
+        name: cut_area
+        operation: add
+      - type: outline
+        name: cut_holes
+        operation: subtract
+    keycaps:
+      main:
+        type: keys
+        side: both
+        size: [keycap_width, keycap_height]
+        bound: false
+        corner: keycap_corner
+        tags: [1u]
+      large:
+        type: keys
+        side: both
+        size: [1.5 keycap_width, keycap_height]
+        bound: false
+        corner: keycap_corner
+        tags: [15u]
+    preview:
+      - type: outline
+        name: base
+      - type: outline
+        name: raw
+        operation: stack
+      - type: outline
+        name: keycaps
+        operation: stack
+
+pcbs:
+  main:
+    outlines:
+      edge:
+        outline: base
+        layer: Edge.Cuts
+    footprints:
+      mcu_left:
+        type: promicro
+        params:
+          orientation: down
+          batteryPins: true
+        anchor:
+          ref: matrix_inner_top
+          shift: [20, -10]
+          rotate: -90
+        nets:
+          RAW: 'L_RAW'
+          GND: 'L_GND'
+          RST: 'L_RST'
+          VCC: 'L_VCC'
+          P21: 'L_P21'
+          P20: 'L_P20'
+          P19: 'L_P19'
+          P18: 'L_P18'
+          P15: 'L_P15'
+          P14: 'L_P14'
+          P16: 'L_P16'
+          P10: 'L_P10'
+          P1: 'L_P1'
+          P0: 'L_P0'
+          P2: 'L_P2'
+          P3: 'L_P3'
+          P4: 'L_P4'
+          P5: 'L_P5'
+          P6: 'L_P6'
+          P7: 'L_P7'
+          P8: 'L_P8'
+          P9: 'L_P9'
+      mcu_right:
+        $extends: pcbs.main.footprints.mcu_left
+        anchor:
+          ref: mirror_matrix_inner_top
+          rotate: 90
+        nets:
+          RAW: 'R_RAW'
+          GND: 'R_GND'
+          RST: 'R_RST'
+          VCC: 'R_VCC'
+          P21: 'R_P21'
+          P20: 'R_P20'
+          P19: 'R_P19'
+          P18: 'R_P18'
+          P15: 'R_P15'
+          P14: 'R_P14'
+          P16: 'R_P16'
+          P10: 'R_P10'
+          P1: 'R_P1'
+          P0: 'R_P0'
+          P2: 'R_P2'
+          P3: 'R_P3'
+          P4: 'R_P4'
+          P5: 'R_P5'
+          P6: 'R_P6'
+          P7: 'R_P7'
+          P8: 'R_P8'
+          P9: 'R_P9'
+      
+      trrs_left:
+        type: trrs
+        nets:
+          A: L_GND
+          B: L_GND
+          C: L_P1
+          D: L_VCC
+        anchor:
+          ref: matrix_inner_top
+          shift: [35, 7.5]
+          rotate: 0
+        params:
+          reverse: true
+          symmetric: true
+      trrs_right:
+        $extends: pcbs.main.footprints.trrs_left
+        nets:
+          A: R_GND
+          B: R_GND
+          C: R_P1
+          D: R_VCC
+        anchor:
+          ref: mirror_matrix_inner_top
+          shift: [30.45, 7.5]
+
+      switch_left:
+        type: pcm12
+        anchor:
+          ref: matrix_inner_top
+          shift: [35, -10]
+          rotate: 90
+        nets:
+          from: L_POS 
+          to: L_RAW
+        params:
+          reverse: true 
+      switch_right:
+        $extends: pcbs.main.footprints.switch_left
+        anchor:
+          ref: mirror_matrix_inner_top
+        nets:
+          from: R_POS 
+          to: R_RAW
+
+      bat_left:
+        type: bat
+        nets: 
+          neg: L_GND
+          pos: L_POS
+        anchor:
+          ref: matrix_inner_home
+          shift: [33, 0]
+          rotate: -90
+      bat_right:
+        $extends: pcbs.main.footprints.bat_left
+        nets: 
+          neg: R_GND
+          pos: R_POS
+        anchor:
+          ref: mirror_matrix_inner_home
+
+      oled_left_bottom:
+        type: oled128x64
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [23.1, 20]
+          rotate: 180
+        nets:
+          SDA: L_P2
+          SCL: L_P3
+          VCC: L_VCC
+          GND: L_GND
+      oled_right_bottom:
+        $extends: pcbs.main.footprints.oled_left_bottom
+        anchor:
+          ref: mirror_matrix_inner_bottom
+        nets:
+          SDA: R_P2
+          SCL: R_P3
+          VCC: R_VCC
+          GND: R_GND
+      
+      reset_left:
+        type: b3u1000p
+        nets:
+          r1: L_RST  
+          r2: L_GND
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [34, 4]
+          rotate: 0
+        params:
+          reverse: true 
+      reset_right:
+        $extends: pcbs.main.footprints.reset_left
+        nets:
+          r1: R_RST  
+          r2: R_GND
+        anchor:
+          ref: mirror_matrix_inner_bottom
+        params:
+          reverse: true 
+      
+      rotary_left_bottom:
+        type: rotary
+        anchor:
+          ref: matrix_inner_bottom
+          shift: [23.1, -3.5]
+          rotate: -90
+        nets:
+          from: L_P14
+          to: inner_thumb_rotary
+          A: L_P8
+          B: L_GND
+          C: L_P9
+      rotary_left_bottom_diode:
+        type: diode
+        anchor:
+          ref: matrix_inner_bottom
+          rotate: 0
+          shift: [23.1, -13]
+        nets:
+          from: inner_thumb_rotary
+          to: L_P7
+        params:
+          via_in_pad: true
+          through_hole: false
+
+      scrollwheel_right:
+        type: scrollwheel
+        anchor:
+          ref: mirror_matrix_inner_bottom
+          shift: [19.1, -1]
+          rotate: 0
+        nets:
+          from: R_P14
+          to: mirror_inner_thumb_scroll
+          A: R_P8
+          B: R_P9
+          C: R_GND
+          D: ''
+      scrollwheel_right_diode:
+        type: diode
+        anchor:
+          ref: mirror_matrix_inner_bottom
+          rotate: 0
+          shift: [23.1, -10]
+        nets:
+          from: mirror_inner_thumb_scroll
+          to: R_P7
+        params:
+          via_in_pad: true
+          through_hole: false
+      
+      scrollwheel_left:
+        type: scrollwheel
+        anchor:
+          ref: thumbsection_outer_thumb
+          shift: [ -2, 20 ]
+          rotate: 180
+        nets:
+          from: L_P20
+          to: outer_thumb_rotary
+          A: L_P10
+          B: L_P16
+          C: L_GND
+          D: ''
+      scrollwheel_left_diode:
+        type: diode
+        anchor:
+          ref: thumbsection_outer_thumb
+          rotate: 0
+          shift: [ 0, 11 ]
+        nets:
+          from: outer_thumb_rotary
+          to: L_P7
+        params:
+          via_in_pad: true
+          through_hole: false
+
+      rotary_right:
+        type: rotary
+        anchor:
+          ref: mirror_thumbsection_outer_thumb
+          shift: [ 0, 20 ]
+          rotate: 0
+        nets:
+          from: R_P20
+          to: mirror_outer_thumb_rotary
+          A: R_P10
+          B: R_GND
+          C: R_P16
+      rotary_right_diode:
+        type: diode
+        anchor:
+          ref: mirror_thumbsection_outer_thumb
+          rotate: 0
+          shift: [ 0, 12 ]
+        nets:
+          from: mirror_outer_thumb_rotary
+          to: R_P7
+        params:
+          via_in_pad: true
+          through_hole: false
+
+      trackball:
+        type: pimoroni_trackball
+        anchor:
+          ref: mirror_thumbsection_outer_thumb
+          rotate: 90
+          shift: [ -5, 30 ]
+        nets:
+          SDA: R_P2
+          SCL: R_P3
+          VCC: R_VCC
+          GND: R_GND
+
+      logo_left:
+        type: stellis_logo_left
+        anchor: 
+          ref: matrix_middle_bottom
+          rotate: 5
+          shift: [ -6, -16.5 ]
+
+      background_front:
+        type: background_front
+        anchor: 
+          ref: 
+            - matrix_middle_bottom
+            - mirror_matrix_middle_bottom
+          shift: [ 0, -4.7 ]
+
+      background_back:
+        type: background_back
+        anchor: 
+          ref: 
+            - matrix_middle_bottom
+            - mirror_matrix_middle_bottom
+          shift: [ 0, -4.7 ]
+
+      
+      
+      

@@ -31,7 +31,8 @@ module.exports = {
     },
     params: {
       class: 'S',
-		  reverse: false
+		  reverse: false,
+      flip: false
     },
     body: p => {
       const standard = `
@@ -76,7 +77,12 @@ module.exports = {
         ${pins('-', '')}
         ${pins('', '-')})
         `
-    } else {
+    } else if(p.param.flip) {
+      return `
+        ${standard}
+        ${pins('', '-')})
+        `
+    } else { 
       return `
         ${standard}
         ${pins('-', '')})
